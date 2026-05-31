@@ -8,7 +8,12 @@ import java.util.stream.Collectors;
 
 public class MainServer {
     public static void main(String[] args) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        int port = Integer.parseInt(
+            System.getenv().getOrDefault("PORT", "8080")
+        );
+        HttpServer server = HttpServer.create(
+            new InetSocketAddress(port), 0
+        );
 
         server.createContext("/register", exchange -> {
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
@@ -107,7 +112,7 @@ public class MainServer {
         server.createContext("/script.js", exchange -> serveFile(exchange, "script.js", "application/javascript"));
 
 
-        System.out.println("Server running. Open http://localhost:8080 in your browser.");
+        System.out.println("Server running on port " + port);
         server.start();
     }
 
